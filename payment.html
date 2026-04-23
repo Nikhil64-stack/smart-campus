@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment - Smart Campus</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .payment-container {
+            max-width: 500px;
+            margin: 4rem auto;
+            background: white;
+            padding: 3rem 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+
+        .payment-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--primary-color);
+        }
+
+        .payment-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            color: var(--text-color);
+        }
+
+        .form-group input {
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            width: 100%;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .pay-btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        .pay-btn:hover {
+            opacity: 0.9;
+        }
+
+        /* Success Overlay Styles using z-index */
+        #success-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(76, 175, 80, 0.95);
+            /* Green background */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            /* Initially hidden behind everything */
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        #success-overlay .overlay-icon {
+            font-size: 6rem;
+            margin-bottom: 2rem;
+            animation: bounce 1s infinite alternate;
+        }
+
+        @keyframes bounce {
+            from {
+                transform: translateY(0);
+            }
+
+            to {
+                transform: translateY(-20px);
+            }
+        }
+
+        #success-overlay h2 {
+            font-size: 3rem;
+            margin: 0;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Success Overlay -->
+    <div id="success-overlay">
+        <i class="fas fa-check-circle overlay-icon"></i>
+        <h2>Payment Successful!</h2>
+        <p style="font-size: 1.5rem; margin-top: 1rem;">Redirecting to order status...</p>
+    </div>
+
+    <nav class="navbar">
+        <div class="logo">SmartCampus VIT</div>
+        <ul class="nav-links">
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="index.html" class="active">Food Ordering</a></li>
+            <li><a href="../vmart/index.html">VMart</a></li>
+            <li><a href="../shuttle/index.html">Shuttle</a></li>
+        </ul>
+    </nav>
+
+    <div class="container main-content" id="main-content">
+        <a href="index.html" style="margin-bottom: 1rem; display: inline-block;">&larr; Back to Zones</a>
+
+        <div class="payment-container">
+            <div class="payment-header">
+                <h2><i class="fas fa-credit-card"></i> Payment Details</h2>
+                <p id="total-amount-display"
+                    style="font-weight: bold; font-size: 1.2rem; color: #2e7d32; margin-top: 1rem;">
+                    Total Amount: ₹0
+                </p>
+                <p style="margin-top: 0.5rem;">Enter your card information securely</p>
+            </div>
+
+            <form id="payment-form" class="payment-form">
+                <div class="form-group">
+                    <label for="card-name">Name on Card</label>
+                    <input type="text" id="card-name" placeholder="Customer Name" pattern="[A-Za-z ]{3,}"
+                        title="Please enter a valid name (letters and spaces only, min length 3)" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="card-number">Card Number</label>
+                    <input type="text" id="card-number" placeholder="XXXX XXXX XXXX XXXX"
+                        pattern="\d{16}|\d{4} \d{4} \d{4} \d{4}" maxlength="19"
+                        title="Please enter a 16-digit card number" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="expiry">Expiry Date</label>
+                        <input type="text" id="expiry" placeholder="MM/YY" pattern="(0[1-9]|1[0-2])\/\d{2}"
+                            maxlength="5" title="Format: MM/YY (e.g., 12/26)" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="cvv">CVV</label>
+                        <input type="password" id="cvv" placeholder="123" pattern="\d{3,4}" maxlength="4"
+                            title="Please enter a 3 or 4-digit CVV" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="pay-btn" id="pay-button">Pay Now</button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Smart Campus System - VIT Chennai. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // grab the price from local storage so we know how much to charge
+            const savedCartMoney = localStorage.getItem('cartTotal');
+            if (savedCartMoney) {
+                document.getElementById('total-amount-display').textContent = 'Total Amount: ₹' + savedCartMoney;
+            }
+
+            // making the credit card box add spaces every 4 numbers automatically
+            const ccField = document.getElementById('card-number');
+            ccField.addEventListener('input', function (e) {
+                let thisBox = e.target;
+                let cursorSpot = thisBox.selectionEnd;
+                let charsCount = thisBox.value.length;
+
+                thisBox.value = thisBox.value.replace(/[^\d]/g, '').replace(/(.{4})/g, '$1 ').trim();
+                thisBox.selectionEnd = cursorSpot += ((thisBox.value.charAt(cursorSpot - 1) === ' ' && thisBox.value.charAt(charsCount - 1) === ' ' && charsCount !== thisBox.value.length) ? 1 : 0);
+            });
+
+            // auto add the slash for MM/YY
+            const expDateBox = document.getElementById('expiry');
+            expDateBox.addEventListener('input', function (evt) {
+                let typedText = evt.target.value.replace(/\D/g, '').substring(0, 4);
+                let theMonth = typedText.substring(0, 2);
+                let theYear = typedText.substring(2, 4);
+
+                if (typedText.length > 2) {
+                    evt.target.value = theMonth + '/' + theYear;
+                } else if (typedText.length === 2 && parseInt(theMonth) > 12) {
+                    evt.target.value = '12/';
+                } else if (typedText.length === 2) {
+                    // only put the slash if they are typing forward (not backspacing)
+                    if (evt.inputType !== 'deleteContentBackward') {
+                        evt.target.value = theMonth + '/';
+                    }
+                } else {
+                    evt.target.value = typedText;
+                }
+            });
+
+            const checkoutForm = document.getElementById('payment-form');
+            const greenPopup = document.getElementById('success-overlay');
+            const everythingElse = document.getElementById('main-content');
+
+            checkoutForm.addEventListener('submit', function (e) {
+                e.preventDefault(); // stop it from actually submitting
+
+                // the html5 built-in patterns make sure the form is valid, so we can just show the success screen
+
+                // dim the background to make the popup pop more
+                everythingElse.style.opacity = '0';
+                everythingElse.style.transition = 'opacity 1s ease-in-out';
+
+                // pop the green screen to the front using zindex
+                greenPopup.style.zIndex = '9999';
+
+                // fade it in
+                requestAnimationFrame(() => {
+                    greenPopup.style.opacity = '1';
+                });
+
+                // wait a couple seconds then push them to the final screen
+                setTimeout(() => {
+                    window.location.href = 'order_status.html';
+                }, 2500);
+            });
+        });
+    </script>
+</body>
+
+</html>

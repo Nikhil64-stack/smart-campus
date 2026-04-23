@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hunger Menu - Smart Campus</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .menu-layout {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .menu-items {
+            flex: 2;
+            min-width: 300px;
+        }
+
+        .cart-sidebar {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .menu-item-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .item-info h4 {
+            margin-bottom: 0.25rem;
+            color: var(--primary-color);
+        }
+
+        .cart-box {
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 100px;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 0.5rem;
+        }
+
+        .total-section {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 2px solid #eee;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="logo">SmartCampus VIT</div>
+        <ul class="nav-links">
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="index.html" class="active">Food Ordering</a></li>
+            <li><a href="../vmart/index.html">VMart</a></li>
+            <li><a href="../shuttle/index.html">Shuttle</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <a href="gymkhana.html" style="margin-bottom: 1rem; display: inline-block;">&larr; Back to Stalls</a>
+        <header class="header-section" style="margin-bottom: 2rem;">
+            <h1>Hunger Menu</h1>
+        </header>
+
+        <div class="menu-layout">
+            <!-- Menu Items List -->
+            <div class="menu-items">
+                <h2>Burgers & Wraps</h2>
+                <br>
+                <!-- Item 1 -->
+                <div class="menu-item-card">
+                    <div class="item-info">
+                        <h4>Chicken Zinger Burger</h4>
+                        <p class="text-light">Crispy chicken patty with mayo.</p>
+                        <p><strong>₹180</strong></p>
+                    </div>
+                    <button class="btn btn-primary">Add to Cart</button>
+                </div>
+
+                <!-- Item 2 -->
+                <div class="menu-item-card">
+                    <div class="item-info">
+                        <h4>Veg Whopper</h4>
+                        <p class="text-light">Double veg patty with cheese.</p>
+                        <p><strong>₹150</strong></p>
+                    </div>
+                    <button class="btn btn-primary">Add to Cart</button>
+                </div>
+
+                <!-- Item 3 -->
+                <div class="menu-item-card">
+                    <div class="item-info">
+                        <h4>Peri Peri Fries</h4>
+                        <p class="text-light">Spicy sprinkled fries.</p>
+                        <p><strong>₹90</strong></p>
+                    </div>
+                    <button class="btn btn-primary">Add to Cart</button>
+                </div>
+            </div>
+
+            <!-- Dynamic Cart Sidebar -->
+            <div class="cart-sidebar">
+                <div class="cart-box">
+                    <!-- Cart content rendered by cart.js -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Smart Campus System - VIT Chennai. All Rights Reserved.</p>
+    </footer>
+
+    <script src="../js/cart.js"></script>
+</body>
+
+</html>

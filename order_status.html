@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Status - Smart Campus</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .order-status-container {
+            max-width: 600px;
+            margin: 4rem auto;
+            text-align: center;
+            background: white;
+            padding: 3rem 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+
+        .status-icon {
+            font-size: 4rem;
+            color: #4CAF50;
+            margin-bottom: 1.5rem;
+            animation: pulse-icon 2s infinite;
+        }
+
+        @keyframes pulse-icon {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .status-title {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 2rem;
+        }
+
+        .status-message {
+            font-size: 1.2rem;
+            color: var(--text-color);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .time-box {
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            display: inline-block;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="logo">SmartCampus VIT</div>
+        <ul class="nav-links">
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="index.html" class="active">Food Ordering</a></li>
+            <li><a href="../vmart/index.html">VMart</a></li>
+            <li><a href="../shuttle/index.html">Shuttle</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="order-status-container">
+            <i class="fas fa-fire-burner status-icon"></i>
+            <h1 class="status-title" id="order-number-display">Order Received!</h1>
+            <div class="status-message">
+                <p>Your food is currently being prepared and cooked with care.</p>
+                <p>Please reach the stall shortly to collect your fresh and hot meal.</p>
+            </div>
+
+            <div class="time-box">
+                <i class="far fa-clock"></i> Estimated preparation time: <span id="prep-time-display">20</span> mins
+            </div>
+
+            <div>
+                <a href="index.html" class="btn btn-primary back-btn">
+                    <i class="fas fa-arrow-left"></i> Back to Food Ordering
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hanging floating timer using z-index -->
+    <div id="floating-timer" style="position: fixed; bottom: 30px; right: 30px; background: var(--primary-color); color: white; padding: 15px 25px; border-radius: 50px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 9999; font-weight: bold; font-size: 1.2rem; display: flex; align-items: center; gap: 10px; transition: transform 0.3s ease;">
+        <i class="fas fa-stopwatch" style="animation: pulse-icon 2s infinite;"></i>
+        <span>Food ready in: <span id="countdown-timer">00:00</span></span>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Smart Campus System - VIT Chennai. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            // picking a random 4 digit number for the receipt
+            const randomOrderId = Math.floor(1000 + Math.random() * 9000);
+
+            // sticking it into the h1 tag
+            const orderTitleSpot = document.getElementById('order-number-display');
+            if (orderTitleSpot) {
+                orderTitleSpot.textContent = `Order Received! #${randomOrderId}`;
+            }
+
+            // make them wait between 15 to 25 mins so it looks real
+            const randomMins = Math.floor(Math.random() * (25 - 15 + 1)) + 15;
+            const clockText = document.getElementById('prep-time-display');
+            if (clockText) {
+                clockText.textContent = randomMins;
+            }
+
+            // floating countdown timer logic
+            let totalSeconds = randomMins * 60;
+            const countdownEl = document.getElementById('countdown-timer');
+            
+            // initialize display immediately
+            const initM = Math.floor(totalSeconds / 60);
+            const initS = totalSeconds % 60;
+            countdownEl.textContent = `${initM.toString().padStart(2, '0')}:${initS.toString().padStart(2, '0')}`;
+
+            const timerInterval = setInterval(() => {
+                if(totalSeconds <= 0) {
+                    clearInterval(timerInterval);
+                    countdownEl.textContent = "Ready!";
+                    countdownEl.parentElement.parentElement.style.background = "#4CAF50"; // Green when ready
+                    return;
+                }
+                totalSeconds--;
+                const m = Math.floor(totalSeconds / 60);
+                const s = totalSeconds % 60;
+                countdownEl.textContent = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+            }, 1000);
+        });
+    </script>
+</body>
+
+</html>
